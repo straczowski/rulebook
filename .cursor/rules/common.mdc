@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+---
+
+# Learn Japanes Clock Coding Rules
+
+## General Principles
+
+- Use functional, declarative programming (no classes)
+- Use arrow functions
+- Omit semicolons
+- Never use logging
+- Never use Enums in TypeScript (use const objects or union types instead)
+- Never use comments
+- For method names use verbs to describe their action
+- Use descriptive variable names with auxiliary verbs (e.g., `isConnected`, `hasError`)
+- Never use Barrel Files
+- Avoid Abbreviations
+- Avoid using "From" in method names
+
+## Keep Methods Small and at a Single Abstraction Level
+
+Methods must be small, focused, and operate at one consistent level of abstraction. A method should either describe what happens (high-level intention) or how it happens (low-level details). Small, well-focused methods are easier to understand, test, and maintain.
+
+## Lokalitätsprinzip – Invoke Methods Where They Are Needed
+
+Methods should be called close to where their results are used. Avoid scattering method calls far from their context or orchestrating logic from distant parts of the code.
+
+### Guidelines:
+
+- Call helper methods right before or where their result is needed.
+- Avoid precomputing values at the top of a function if they are only used much later.
+- Keep dependent operations grouped together; the reader should not need to scroll or search to understand the logic flow.
+
+
+## Avoid Using Regex
+
+Regular expressions are hard to read and understand for humans. Always prefer String methods over regex when possible. String methods like `split()`, `replace()`, `replaceAll()`, `includes()`, `startsWith()`, `endsWith()`, and `filter()` are more readable and maintainable.
+
+### Guidelines:
+
+- Prefer String methods for common string operations
+- Use `replaceAll()` for simple replacements
+- Use `includes()`, `startsWith()`, `endsWith()` for pattern matching
+- Only use regex when String methods are insufficient
+
+### Example: Removing All Whitespace
+
+```typescript
+const removeWhitespace= (text: string): string => {
+  return text.replaceAll(' ', '').replaceAll('\t', '').replaceAll('\n', '')
+}
+```
+
+Instead of using regex like `text.replace(/\s+/g, '')`, the String methods approach is more explicit and easier to understand.
+

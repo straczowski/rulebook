@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+
+# Testing with node:test
+
+Use Node.js native test framework exclusively.
+
+### Pattern
+
+```typescript
+import assert from "node:assert"
+import { afterEach, beforeEach, describe, it } from "node:test"
+
+describe("add2", () => {
+
+  it("should add 2 to a positive number", () => {
+    const result = add2(5)
+    assert.equal(result, 7)
+  })
+
+  it("should add 2 to a negative number", () => {
+    const result = add2(-3)
+    assert.equal(result, -1)
+  })
+})
+```
+
+### Rules
+
+- Focus to the most important tet
+- Use native `node:test` module (no Jest or other frameworks)
+- Import from `node:assert` for assertions
+- Use `describe`, `it`, `beforeEach`, `afterEach` structure
+- Test environment variables: save original in `const originalEnv`, restore in `afterEach`
+- Test both happy paths and error cases
+- Test validation logic thoroughly
+- Test one behavior per test case
+- Use descriptive test names starting with "should"
+- Test edge cases (missing values, invalid types, boundary conditions)
+- Keep tests focused and fast
+- Aim for 5 tests maximum per test file, no overhead

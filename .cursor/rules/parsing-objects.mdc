@@ -1,0 +1,30 @@
+---
+alwaysApply: true
+---
+
+# Use Zod for Schema Validation
+
+Always use Zod schema validation and type safety. Anytime we have to parse an unkown object e.g. coming from API or reading environment variables we want to use zod library for validation
+
+### Pattern
+
+```typescript
+import { z } from "zod"
+
+const mySchema = z.object({
+  someAttribute: z.string(),
+})
+
+export type MySchema = z.infer<typeof mySchema>
+
+export const parse = (): MySchema => {
+  return mySchema.parse('...')
+}
+```
+
+### Rules
+
+- Use Zod schemas for all environment variable validation
+- Export typed config with `z.infer<typeof schema>`
+- Fail fast on missing required configuration - let Zod throw
+

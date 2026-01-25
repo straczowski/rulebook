@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+---
+
+# Top Down File Structure
+
+Place the main entry point of a file at the top, followed by functions in the order they are called. This lets you read the file top-down, following the program flow naturally without jumping around. A reader should be able to open a file and understand the flow of logic simply by scrolling downward. The top of the file should describe high-level behavior, and each subsequent function should reveal more detail—just like reading a well-structured narrative.
+
+In best case scenario the entry-point method is same named as the file. E.g. the method `startServer()` comes from the file `start-server.ts`
+
+### Example Structure
+
+1. Public entry point function
+2. High-level orchestration functions
+3. Mid-level helpers
+4. Low-level utility functions

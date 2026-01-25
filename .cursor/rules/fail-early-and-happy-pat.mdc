@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+
+# Fail Early & Return Happy Path at the End
+
+Methods should fail fast on invalid conditions and always return the successful result at the end. Avoid nesting the main logic inside multiple if or else blocks — the “happy path” should be clear, linear, and unindented. Keeping the happy path at the bottom or after all validations ensures the main logic is easy to read top-down, with early exits handling exceptional cases.
+
+### Guidelines:
+
+- Check invalid conditions first; throw errors or return early.
+- Keep the successful outcome at the end of the method, clearly showing the happy path.
+- Avoid deep nesting. each method should read like a straight narrative from top to bottom.
+- Use intention-revealing variable names for the returned object.
+
+### Example Pattern
+
+```typescript
+function loadConfig() {
+  const config = parse(process.env)
+  if (!config) {
+    throw new Error("Environment variables are not set") // fail early
+  }
+  return config // happy path
+}
+```
