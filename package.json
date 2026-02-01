@@ -8,7 +8,11 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
   "keywords": [
     "mcp",
@@ -20,14 +24,19 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "ejs": "^3.1.9",
+    "express": "^4.18.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.6",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.54.0"
   }
 }

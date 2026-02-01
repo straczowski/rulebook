@@ -34,7 +34,6 @@ describe("add2", () => {
 - Use `describe`, `it`, `beforeEach`, `afterEach` structure
 - Test environment variables: save original in `const originalEnv`, restore in `afterEach`
 - Test both happy paths and error cases
-- Test validation logic thoroughly
 - Test one behavior per test case
 - Use descriptive test names starting with "should"
 - Test edge cases (missing values, invalid types, boundary conditions)

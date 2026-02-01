@@ -5,11 +5,11 @@ const startServer = () => {
   const config = parseConfig()
   const app = express()
 
-  app.get("/health", (_req, res) => {
+  app.get("", (_req, res) => {
     res.json({ status: "ok" })
   })
 
-  app.listen(config.port, () => {})
+  app.listen(config.port)
 }
 
 startServer()
