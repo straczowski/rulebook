@@ -84,16 +84,16 @@ Users can write any markdown content below the frontmatter.
   - Invalid YAML syntax
   - Missing required fields
   - Invalid field types
-- [ ] Document the expected frontmatter format for users
+- [x] Document the expected frontmatter format for users
 
 ### Step 2.3: Rule Directory Structure
 - [x] Define rules directory location (e.g., `./rules` or configurable)
-- [ ] Create initial rules directory structure
-- [ ] Add example rule files for testing (with proper YAML frontmatter)
+- [x] Create initial rules directory structure
+- [x] Add example rule files for testing (with proper YAML frontmatter)
   - Example: `rules/typescript/components.md` with frontmatter and content
   - Example: `rules/typescript/naming.md` with different metadata
-- [ ] Document rule file naming conventions
-- [ ] Document the YAML frontmatter format and required fields
+- [x] Document rule file naming conventions
+- [x] Document the YAML frontmatter format and required fields
 
 ## Phase 3: Rule Matching Algorithm
 

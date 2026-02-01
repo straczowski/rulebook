@@ -21,7 +21,8 @@ rulebook/
 │   ├── mcp/             # MCP server implementation
 │   ├── web/              # Web UI routes and templates
 │   └── index.ts         # Application entry point
-├── rules/                # Markdown rule files (to be created)
+├── rules/                # Markdown rule files (see docs/rule-file-format.md)
+├── docs/                 # Documentation (rule format, etc.)
 ├── views/                # EJS templates (to be created)
 ├── spec/                 # Project specifications
 └── dist/                 # Compiled JavaScript output
@@ -48,6 +49,10 @@ Or run in development mode with auto-reload:
 ```bash
 npm run dev
 ```
+
+## Rules Directory
+
+Rule files are stored under `./rules` (override with `RULES_DIRECTORY`). See [Rule File Format](docs/rule-file-format.md) for YAML frontmatter and naming conventions. Example rules are in `rules/typescript/`.
 
 ## Health Check
 

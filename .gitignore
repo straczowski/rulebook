@@ -6,6 +6,8 @@ node_modules/
 # Views
 /views/
 
+/rules/
+
 # Build output
 dist/
 
