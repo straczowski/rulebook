@@ -54,6 +54,12 @@ npm run dev
 
 Rule files are stored under `./rules` (override with `RULES_DIRECTORY`). See [Rule File Format](docs/rule-file-format.md) for YAML frontmatter and naming conventions. Example rules are in `rules/typescript/`.
 
+## MCP Server
+
+The MCP server is part of the same Express app. After starting the server (`npm start`), MCP is available over Streamable HTTP at `/mcp` (same host and port). It exposes the tool `get_applicable_rules`.
+
+Cursor does not yet support Streamable HTTP natively. To use Rulebook from Cursor, configure the **STDIO-to-Streamable-HTTP adapter** so Cursor (stdio) talks to the adapter, and the adapter talks to Rulebook at `/mcp`. See [Connecting Cursor](docs/cursor-setup.md) for step-by-step setup.
+
 ## Health Check
 
 Once running, check the health endpoint:
@@ -64,8 +70,10 @@ curl http://localhost:3000/health
 ## Development
 
 - `npm run build` - Compile TypeScript to JavaScript
+- `npm start` - Start the server (HTTP + MCP at `/mcp`)
 - `npm run dev` - Run in development mode with auto-reload
 - `npm run type-check` - Type check without building
+- `npm test` - Run unit tests
 
 ## License
 

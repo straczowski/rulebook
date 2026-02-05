@@ -5,23 +5,26 @@ This document outlines the concrete, incremental implementation steps for the Ru
 ## Phase 1: Foundation & Architecture
 
 ### Step 1.1: Project Setup
-- [x] Initialize Node.js project with TypeScript
-- [x] Set up package.json with dependencies
-- [x] Configure TypeScript (tsconfig.json)
-- [x] Set up project folder structure
-- [x] Add basic tooling (ESLint, Prettier if needed)
-- [x] Create initial README.md
+
+- Initialize Node.js project with TypeScript
+- Set up package.json with dependencies
+- Configure TypeScript (tsconfig.json)
+- Set up project folder structure
+- Add basic tooling (ESLint, Prettier if needed)
+- Create initial README.md
 
 ### Step 1.2: Framework Selection & Justification
-- [x] Evaluate NestJS vs ExpressJS for this use case
-- [x] Document decision and justification
-- [x] Initialize ExpressJS framework
-- [x] Set up basic project structure for ExpressJS
-- [x] Add health check route (e.g., `GET /health` or `GET /api/health`) returning `{ status: "ok" }`
+
+- Evaluate NestJS vs ExpressJS for this use case
+- Document decision and justification
+- Initialize ExpressJS framework
+- Set up basic project structure for ExpressJS
+- Add health check route (e.g., `GET /health` or `GET /api/health`) returning `{ status: "ok" }`
 
 **Decision: ExpressJS** ✅
 
 **Justification:**
+
 - **Simplicity**: ExpressJS is lightweight and straightforward, aligning with our "favor clarity over cleverness" principle
 - **No over-engineering**: For an MVP with simple CRUD operations, ExpressJS provides exactly what we need without unnecessary abstractions
 - **Explicit control**: We can maintain clear separation of concerns (domain logic, transport, UI) without framework-imposed structure
@@ -32,8 +35,9 @@ This document outlines the concrete, incremental implementation steps for the Ru
 NestJS would add unnecessary complexity (dependency injection, decorators, modules) for a project that doesn't require enterprise-scale architecture. We can achieve clean separation of concerns through simple folder structure and explicit imports.
 
 ### Step 1.3: Core Domain Model
-- [x] Create TypeScript interfaces/types in code (e.g., `src/domain/types.ts` or `src/domain/Rule.ts`)
-- [x] Define `Rule` interface/class with:
+
+- Create TypeScript interfaces/types in code (e.g., `src/domain/types.ts` or `src/domain/Rule.ts`)
+- Define `Rule` interface/class with:
   - `id`: unique identifier (file path relative to rules directory)
   - `content`: markdown content (body, after frontmatter)
   - `metadata`: frontmatter object (parsed from YAML)
@@ -41,12 +45,13 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
     - `folders`: string[] (e.g., ["src/components", "src/utils"])
     - `intent`: string (e.g., "refactor", "style", "pattern")
     - `priority`: number (optional, default: 0)
-- [x] Define `RuleMetadata` interface
-- [x] Create types for rule matching criteria
+- Define `RuleMetadata` interface
+- Create types for rule matching criteria
 
 **Note**: These TypeScript interfaces represent the in-memory structure. The actual rule files are markdown with YAML frontmatter (see format below). Users create rules by writing markdown files with this structure.
 
 **Rule File Format:**
+
 ```markdown
 ---
 fileTypes: ["*.ts", "*.tsx"]
@@ -64,9 +69,10 @@ Users can write any markdown content below the frontmatter.
 ## Phase 2: Rule Storage & Parsing
 
 ### Step 2.1: File System Abstraction
-- [x] Create `RuleRepository` interface
-- [x] Implement filesystem-based `FileSystemRuleRepository`
-- [x] Methods:
+
+- Create `RuleRepository` interface
+- Implement filesystem-based `FileSystemRuleRepository`
+- Methods:
   - `listAllRules(): Promise<Rule[]>`
   - `getRuleById(id: string): Promise<Rule | null>`
   - `createRule(id: string, content: string, metadata: RuleMetadata): Promise<Rule>`
@@ -74,48 +80,53 @@ Users can write any markdown content below the frontmatter.
   - `updateRule(id: string, content: string, metadata: RuleMetadata): Promise<Rule>`
 
 ### Step 2.2: Markdown Parsing
-- [x] Choose markdown parser (e.g., `gray-matter` for frontmatter, `marked` or `markdown-it` for rendering)
-- [x] Create `MarkdownParser` service
-- [x] Parse YAML frontmatter from markdown files (metadata extraction)
-- [x] Extract markdown body content (everything after frontmatter)
-- [x] Validate frontmatter structure matches `RuleMetadata` interface
-- [x] Handle edge cases:
+
+- Choose markdown parser (e.g., `gray-matter` for frontmatter, `marked` or `markdown-it` for rendering)
+- Create `MarkdownParser` service
+- Parse YAML frontmatter from markdown files (metadata extraction)
+- Extract markdown body content (everything after frontmatter)
+- Validate frontmatter structure matches `RuleMetadata` interface
+- Handle edge cases:
   - Missing frontmatter (use defaults or error)
   - Invalid YAML syntax
   - Missing required fields
   - Invalid field types
-- [x] Document the expected frontmatter format for users
+- Document the expected frontmatter format for users
 
 ### Step 2.3: Rule Directory Structure
-- [x] Define rules directory location (e.g., `./rules` or configurable)
-- [x] Create initial rules directory structure
-- [x] Add example rule files for testing (with proper YAML frontmatter)
+
+- Define rules directory location (e.g., `./rules` or configurable)
+- Create initial rules directory structure
+- Add example rule files for testing (with proper YAML frontmatter)
   - Example: `rules/typescript/components.md` with frontmatter and content
   - Example: `rules/typescript/naming.md` with different metadata
-- [x] Document rule file naming conventions
-- [x] Document the YAML frontmatter format and required fields
+- Document rule file naming conventions
+- Document the YAML frontmatter format and required fields
 
 ## Phase 3: Rule Matching Algorithm
 
 ### Step 3.1: Matching Logic
-- [ ] Create `RuleMatcher` service
-- [ ] Implement `matchRules(filePaths: string[]): Promise<Rule[]>`
-- [ ] Matching criteria:
+
+- Create `RuleMatcher` service
+- Implement `matchRules(filePaths: string[]): Promise<Rule[]>` (via `RuleMatchCriteria`: `filePaths`, optional `intent`)
+- Matching criteria:
   - File type matching (glob patterns: `*.ts`, `*.tsx`, etc.)
   - Folder matching (path prefix matching)
   - Intent filtering (if provided)
-- [ ] Return rules sorted by priority (highest first)
+- Return rules sorted by priority (highest first)
 
 ### Step 3.2: Path Matching Utilities
-- [ ] Create utility functions for:
+
+- Create utility functions for:
   - Glob pattern matching (e.g., `minimatch` or custom)
   - Path prefix matching
   - Normalizing paths for comparison
-- [ ] Add unit tests for matching logic
+- Add unit tests for matching logic
 
 ### Step 3.3: Matching Tests
-- [ ] Create test fixtures (sample rules, sample file paths)
-- [ ] Write unit tests for:
+
+- Create test fixtures (sample rules, sample file paths)
+- Write unit tests for:
   - File type matching
   - Folder matching
   - Multiple rules matching same file
@@ -125,13 +136,15 @@ Users can write any markdown content below the frontmatter.
 ## Phase 4: MCP Server Implementation
 
 ### Step 4.1: MCP Server Setup
-- [ ] Install MCP SDK/package
-- [ ] Create MCP server entry point
-- [ ] Set up MCP server configuration
-- [ ] Register MCP tool: `get_applicable_rules`
+
+- Install MCP SDK/package
+- Create MCP server entry point
+- Set up MCP server configuration
+- Register MCP tool: `get_applicable_rules`
 
 ### Step 4.2: MCP Tool Definition
-- [ ] Define tool schema:
+
+- Define tool schema:
   - Name: `get_applicable_rules`
   - Description: Returns applicable rules for given file paths
   - Parameters:
@@ -140,19 +153,21 @@ Users can write any markdown content below the frontmatter.
   - Returns: Array of rule objects with `id`, `content`, `metadata`
 
 ### Step 4.3: MCP Tool Implementation
-- [ ] Implement tool handler
-- [ ] Integrate with `RuleMatcher`
-- [ ] Format response according to MCP spec
-- [ ] Add error handling
-- [ ] Test MCP tool via MCP client
+
+- Implement tool handler
+- Integrate with `RuleMatcher`
+- Format response according to MCP spec
+- Add error handling
+- Test MCP tool via MCP client
 
 ## Phase 5: HTTP API
 
 ### Step 5.1: API Structure
-- [ ] Set up HTTP server with Express
-- [ ] Configure EJS template engine: `app.set('view engine', 'ejs')`
-- [ ] Set views directory for EJS templates
-- [ ] Define API routes:
+
+- Set up HTTP server with Express
+- Configure EJS template engine: `app.set('view engine', 'ejs')`
+- Set views directory for EJS templates
+- Define API routes:
   - `GET /api/rules` - List all rules
   - `GET /api/rules/:id` - Get single rule
   - `POST /api/rules` - Create new rule
@@ -161,27 +176,31 @@ Users can write any markdown content below the frontmatter.
   - `POST /api/rules/match` - Match rules for file paths (for testing)
 
 ### Step 5.2: API Implementation
-- [ ] Implement each route handler
-- [ ] Add request validation
-- [ ] Add error handling middleware
-- [ ] Return appropriate HTTP status codes
-- [ ] Add response DTOs/types
+
+- Implement each route handler
+- Add request validation
+- Add error handling middleware
+- Return appropriate HTTP status codes
+- Add response DTOs/types
 
 ### Step 5.3: API Testing
-- [ ] Create API integration tests
-- [ ] Test all endpoints
-- [ ] Test error cases
-- [ ] Document API endpoints (OpenAPI/Swagger optional)
+
+- Create API integration tests
+- Test all endpoints
+- Test error cases
+- Document API endpoints (OpenAPI/Swagger optional)
 
 ## Phase 6: Web Interface
 
 ### Step 6.1: UI Framework Decision
-- [x] Choose approach: **Server-side rendering** ✅
-- [x] Choose template engine: **EJS** ✅
+
+- Choose approach: **Server-side rendering** ✅
+- Choose template engine: **EJS** ✅
 
 **Decision: Server-side rendering with EJS**
 
 **Justification:**
+
 - **EJS (Embedded JavaScript)** is the lightest-weight option that still provides flexibility
   - Simple syntax: plain HTML with embedded JavaScript (`<% %>` tags)
   - Minimal dependencies and setup
@@ -198,96 +217,107 @@ Users can write any markdown content below the frontmatter.
 **Implementation**: Use `ejs` package with Express `app.set('view engine', 'ejs')`
 
 ### Step 6.2: Rule List View
-- [ ] Create EJS template for rule list view
-- [ ] Create Express route handler for list page
-- [ ] Display folder structure (tree view)
-- [ ] Show rule count per folder
-- [ ] Add navigation to view individual rules
-- [ ] Style with basic CSS
+
+- Create EJS template for rule list view
+- Create Express route handler for list page
+- Display folder structure (tree view)
+- Show rule count per folder
+- Add navigation to view individual rules
+- Style with basic CSS
 
 ### Step 6.3: Rule View Page
-- [ ] Create EJS template for single rule view
-- [ ] Create Express route handler for rule detail page
-- [ ] Render markdown content (use markdown renderer)
-- [ ] Display metadata in readable format
-- [ ] Add "Edit" and "Delete" buttons
-- [ ] Add "Back to list" navigation
+
+- Create EJS template for single rule view
+- Create Express route handler for rule detail page
+- Render markdown content (use markdown renderer)
+- Display metadata in readable format
+- Add "Edit" and "Delete" buttons
+- Add "Back to list" navigation
 
 ### Step 6.4: Rule Creation/Editing
-- [ ] Create EJS template for rule creation/editing form
-- [ ] Create Express route handlers (GET for form, POST/PUT for submission)
-- [ ] Create form/editor for new rule
-- [ ] **Option A (Form-based)**: Separate fields for:
+
+- Create EJS template for rule creation/editing form
+- Create Express route handlers (GET for form, POST/PUT for submission)
+- Create form/editor for new rule
+- **Option A (Form-based)**: Separate fields for:
   - File path/name (for rule location)
   - Metadata fields (fileTypes, folders, intent, priority) - generates YAML frontmatter
   - Markdown content (textarea for body)
   - Preview the full markdown with frontmatter before saving
-- [ ] **Option B (Raw editor)**: Single textarea showing full markdown file with frontmatter
+- **Option B (Raw editor)**: Single textarea showing full markdown file with frontmatter
   - Syntax highlighting for YAML frontmatter and markdown
   - Validation of frontmatter structure
-- [ ] Add validation (frontmatter structure, required fields)
-- [ ] Submit to API (server parses frontmatter and validates)
-- [ ] Handle success/error feedback
+- Add validation (frontmatter structure, required fields)
+- Submit to API (server parses frontmatter and validates)
+- Handle success/error feedback
 
 **Recommendation**: Start with Option A (form-based) for better UX, allow switching to raw editor for advanced users.
 
 ### Step 6.5: Rule Deletion
-- [ ] Add delete confirmation dialog
-- [ ] Call DELETE API
-- [ ] Refresh list after deletion
-- [ ] Handle errors
+
+- Add delete confirmation dialog
+- Call DELETE API
+- Refresh list after deletion
+- Handle errors
 
 ## Phase 7: Integration & Polish
 
 ### Step 7.1: Configuration
-- [x] Add configuration file (e.g., `config.json` or environment variables)
-- [x] Configurable rules directory path
-- [x] Configurable server port
-- [ ] Configurable MCP server settings
+
+- Add configuration file (e.g., `config.json` or environment variables)
+- Configurable rules directory path
+- Configurable server port
+- Configurable MCP server settings
 
 ### Step 7.2: Error Handling
-- [ ] Add comprehensive error handling
-- [ ] User-friendly error messages
-- [ ] Logging setup (console or file-based)
-- [ ] Handle edge cases gracefully
+
+- Add comprehensive error handling
+- User-friendly error messages
+- Logging setup (console or file-based)
+- Handle edge cases gracefully
 
 ### Step 7.3: Documentation
-- [ ] Update README.md with:
+
+- Update README.md with:
   - Setup instructions
   - Configuration options
   - API documentation
   - Rule file format documentation
   - MCP server setup instructions
-- [ ] Add example rule files
-- [ ] Document matching algorithm behavior
+- Add example rule files
+- Document matching algorithm behavior
 
 ### Step 7.4: Testing
-- [ ] Unit tests for core domain logic
-- [ ] Integration tests for API
-- [ ] End-to-end test for MCP tool
-- [ ] Manual testing of web UI
+
+- Unit tests for core domain logic
+- Integration tests for API
+- End-to-end test for MCP tool
+- Manual testing of web UI
 
 ## Phase 8: MVP Completion
 
 ### Step 8.1: Final Integration
-- [ ] Ensure all components work together
-- [ ] Test full workflow:
+
+- Ensure all components work together
+- Test full workflow:
   - Create rule via web UI
   - Query via MCP tool
   - Verify matching works correctly
   - Delete rule via web UI
 
 ### Step 8.2: Code Quality
-- [ ] Code review and refactoring
-- [ ] Remove any dead code
-- [ ] Ensure type safety throughout
-- [ ] Verify no console.logs in production code
+
+- Code review and refactoring
+- Remove any dead code
+- Ensure type safety throughout
+- Verify no console.logs in production code
 
 ### Step 8.3: Deployment Preparation
-- [ ] Add startup script
-- [ ] Document deployment process
-- [ ] Create example configuration
-- [ ] Test in clean environment
+
+- Add startup script
+- Document deployment process
+- Create example configuration
+- Test in clean environment
 
 ## Implementation Order Summary
 
