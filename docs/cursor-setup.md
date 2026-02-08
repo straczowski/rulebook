@@ -31,7 +31,7 @@ Add the adapter to your Cursor MCP settings. The adapter runs as a stdio MCP ser
 - **URI**: URL of your Rulebook server including the `/mcp` path. Use your actual host and port (e.g. `http://192.168.1.10:3000/mcp` if Rulebook runs on another machine).
 - **MCP_NAME**: Optional; name shown in Cursor for this server.
 
-Restart Cursor or reload MCP servers after changing the config. Rulebook should appear with one tool: `get_applicable_rules`.
+Restart Cursor or reload MCP servers after changing the config. Rulebook should appear with one tool: `get_rules_for_files`.
 
 ## Verifying Rulebook is reachable
 

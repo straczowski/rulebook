@@ -35,7 +35,7 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
   - `priority`: number (optional, default: 0) - higher priority rules are returned first
 - The markdown body (after frontmatter) contains the actual rule content
 - Rules are data, not prompts
-- The MCP server does NOT refactor code — it only returns applicable rules
+- The MCP server does NOT refactor code — it only returns rules that match the given file paths
 
 **Example Rule File:**
 ```markdown

@@ -138,13 +138,13 @@ Users can write any markdown content below the frontmatter.
 - Install MCP SDK/package
 - Create MCP server entry point
 - Set up MCP server configuration
-- Register MCP tool: `get_applicable_rules`
+- Register MCP tool: `get_rules_for_files`
 
 ### Step 4.2: MCP Tool Definition
 
 - Define tool schema:
-  - Name: `get_applicable_rules`
-  - Description: Returns applicable rules for given file paths
+  - Name: `get_rules_for_files`
+  - Description: Returns project coding rules that match the given file paths. Call when refactoring or editing those files so the agent can follow project conventions.
   - Parameters:
     - `filePaths`: string[] (required)
   - Returns: Array of rule objects with `id`, `content`, `metadata`

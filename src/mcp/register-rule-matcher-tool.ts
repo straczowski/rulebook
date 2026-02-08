@@ -8,7 +8,7 @@ const registerRuleMatcherTool = (
   rulesDirectory: string
 ) => {
   const getApplicableRulesSchema = {
-    filePaths: z.array(z.string()).describe("List of file paths to match rules for"),
+    filePaths: z.array(z.string()).describe("File paths you are working on; rules are returned for these paths"),
   }
   const handler = async (args: unknown) => {
     const { filePaths } = args as { filePaths: string[] }
@@ -16,8 +16,8 @@ const registerRuleMatcherTool = (
   }
   registerTool(
     server,
-    "get_applicable_rules",
-    "Returns applicable coding rules for the given file paths. Use when refactoring or applying project rules to specific files.",
+    "get_rules_for_files",
+    "Returns the user's coding rules (guidelines, principles) that match the given file paths. Call always before starting to code on those files, and when refactoring, editing, or when the user asks for coding rules, guidelines, or principles.",
     getApplicableRulesSchema,
     handler
   )
@@ -37,7 +37,7 @@ const getApplicableRulesResponse = async (
     }))
     const text =
       matchingRules.length === 0
-        ? "No applicable rules found for the given file paths."
+        ? "No rules found for the given file paths."
         : JSON.stringify(rulesPayload, null, 2)
     return {
       content: [{ type: "text" as const, text }],
