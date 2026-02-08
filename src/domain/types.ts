@@ -1,7 +1,6 @@
 export interface RuleMetadata {
   fileTypes: string[]
   folders: string[]
-  intent: string
   priority?: number
 }
 
@@ -13,5 +12,4 @@ export interface Rule {
 
 export interface RuleMatchCriteria {
   filePaths: string[]
-  intent?: string
 }

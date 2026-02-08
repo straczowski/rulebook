@@ -19,7 +19,6 @@ Frontmatter must be the first thing in the file, between `---` delimiters.
 |------------|----------|-------------|
 | `fileTypes` | string[] | Glob patterns for file types this rule applies to (e.g. `["*.ts", "*.tsx"]`). |
 | `folders`   | string[] | Folder paths this rule applies to (e.g. `["src/components", "src/utils"]`). Path prefix matching is used. |
-| `intent`    | string   | Purpose of the rule (e.g. `"refactor"`, `"style"`, `"pattern"`). Used for filtering when querying rules. |
 
 ### Optional Fields
 
@@ -33,7 +32,6 @@ Frontmatter must be the first thing in the file, between `---` delimiters.
 ---
 fileTypes: ["*.ts", "*.tsx"]
 folders: ["src/components"]
-intent: "refactor"
 priority: 5
 ---
 ```
@@ -41,7 +39,6 @@ priority: 5
 ### Validation
 
 - `fileTypes` and `folders` must be non-empty arrays of strings.
-- `intent` must be a non-empty string.
 - `priority` must be a number if present.
 - Invalid or missing required fields cause the file to be rejected when loading rules.
 
@@ -55,7 +52,6 @@ Everything after the closing `---` is the rule content. Use normal Markdown (hea
 ---
 fileTypes: ["*.ts", "*.tsx"]
 folders: ["src/components"]
-intent: "refactor"
 priority: 5
 ---
 

@@ -13,9 +13,6 @@ const createRuleMatcher = (repository: RuleRepository) => {
   }
 
   const ruleMatchesAnyPath = (rule: Rule, criteria: RuleMatchCriteria): boolean => {
-    if (criteria.intent !== undefined && rule.metadata.intent !== criteria.intent) {
-      return false
-    }
     return criteria.filePaths.some((filePath) => pathMatchesRule(filePath, rule))
   }
 

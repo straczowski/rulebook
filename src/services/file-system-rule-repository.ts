@@ -2,7 +2,8 @@ import { readdir, readFile, writeFile, mkdir, unlink } from "node:fs/promises"
 import { join, dirname, relative } from "node:path"
 import { Rule, RuleMetadata } from "../domain/types.js"
 import { RuleRepository } from "../domain/repository.js"
-import { parseMarkdownFile, formatMarkdownFile } from "./markdown-rule-parser.js"
+import { parseMarkdownFile } from "./markdown-rule-parser.js"
+import { formatMarkdownFile } from "./format-mardkown-file.js"
 
 const createFileSystemRuleRepository = (rulesDirectory: string): RuleRepository => {
   const listAllRules = async (): Promise<Rule[]> => {

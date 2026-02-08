@@ -32,7 +32,6 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
 - Each Markdown file **must start with YAML frontmatter** containing metadata:
   - `fileTypes`: array of glob patterns (e.g., `["*.ts", "*.tsx"]`)
   - `folders`: array of folder paths (e.g., `["src/components", "src/utils"]`)
-  - `intent`: string describing the rule's purpose (e.g., `"refactor"`, `"style"`, `"pattern"`)
   - `priority`: number (optional, default: 0) - higher priority rules are returned first
 - The markdown body (after frontmatter) contains the actual rule content
 - Rules are data, not prompts
@@ -43,7 +42,6 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
 ---
 fileTypes: ["*.ts", "*.tsx"]
 folders: ["src/components"]
-intent: "refactor"
 priority: 5
 ---
 

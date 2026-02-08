@@ -1,6 +1,6 @@
 import { RuleMetadata } from "../domain/types.js"
 
-const parseMarkdownFile = (content: string): { content: string; metadata: RuleMetadata } | null => {
+export const parseMarkdownFile = (content: string): { content: string; metadata: RuleMetadata } | null => {
   if (!hasFrontmatter(content)) {
     return null
   }
@@ -55,7 +55,6 @@ const parseYamlFrontmatter = (yamlText: string): RuleMetadata | null => {
   return {
     fileTypes: metadata.fileTypes,
     folders: metadata.folders,
-    intent: metadata.intent,
     priority: metadata.priority,
   }
 }
@@ -77,8 +76,6 @@ const parseYamlLine = (line: string, metadata: Partial<RuleMetadata>): void => {
     if (arrayValue) {
       metadata[key] = arrayValue
     }
-  } else if (key === "intent") {
-    metadata.intent = parseIntentField(value)
   } else if (key === "priority") {
     metadata.priority = parsePriorityField(value)
   }
@@ -108,10 +105,6 @@ const parseArrayField = (key: string, value: string): string[] | null => {
   return parseYamlArray(value)
 }
 
-const parseIntentField = (value: string): string => {
-  return removeQuotes(value)
-}
-
 const parsePriorityField = (value: string): number | undefined => {
   const priority = Number.parseInt(value, 10)
   if (Number.isNaN(priority)) {
@@ -121,7 +114,7 @@ const parsePriorityField = (value: string): number | undefined => {
 }
 
 const hasRequiredFields = (metadata: Partial<RuleMetadata>): metadata is RuleMetadata => {
-  return !!metadata.fileTypes && !!metadata.folders && !!metadata.intent
+  return !!metadata.fileTypes && !!metadata.folders
 }
 
 const parseYamlArray = (value: string): string[] | null => {
@@ -162,46 +155,3 @@ const removeQuotes = (value: string): string => {
   }
   return value
 }
-
-const formatMarkdownFile = (content: string, metadata: RuleMetadata): string => {
-  const frontmatter = formatYamlFrontmatter(metadata)
-  return `---\n${frontmatter}\n---\n\n${content}\n`
-}
-
-const formatYamlFrontmatter = (metadata: RuleMetadata): string => {
-  const lines: string[] = []
-
-  lines.push(formatFileTypesLine(metadata))
-  lines.push(formatFoldersLine(metadata))
-  lines.push(formatIntentLine(metadata))
-
-  const priorityLine = formatPriorityLine(metadata)
-  if (priorityLine) {
-    lines.push(priorityLine)
-  }
-
-  return lines.join("\n")
-}
-
-const formatFileTypesLine = (metadata: RuleMetadata): string => {
-  const formatted = metadata.fileTypes.map((f) => `"${f}"`).join(", ")
-  return `fileTypes: [${formatted}]`
-}
-
-const formatFoldersLine = (metadata: RuleMetadata): string => {
-  const formatted = metadata.folders.map((f) => `"${f}"`).join(", ")
-  return `folders: [${formatted}]`
-}
-
-const formatIntentLine = (metadata: RuleMetadata): string => {
-  return `intent: "${metadata.intent}"`
-}
-
-const formatPriorityLine = (metadata: RuleMetadata): string | null => {
-  if (metadata.priority === undefined) {
-    return null
-  }
-  return `priority: ${metadata.priority}`
-}
-
-export { parseMarkdownFile, formatMarkdownFile }

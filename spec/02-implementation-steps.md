@@ -43,7 +43,6 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
   - `metadata`: frontmatter object (parsed from YAML)
     - `fileTypes`: string[] (e.g., ["*.ts", "*.tsx"])
     - `folders`: string[] (e.g., ["src/components", "src/utils"])
-    - `intent`: string (e.g., "refactor", "style", "pattern")
     - `priority`: number (optional, default: 0)
 - Define `RuleMetadata` interface
 - Create types for rule matching criteria
@@ -56,7 +55,6 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
 ---
 fileTypes: ["*.ts", "*.tsx"]
 folders: ["src/components"]
-intent: "refactor"
 priority: 5
 ---
 
@@ -108,7 +106,7 @@ Users can write any markdown content below the frontmatter.
 ### Step 3.1: Matching Logic
 
 - Create `RuleMatcher` service
-- Implement `matchRules(filePaths: string[]): Promise<Rule[]>` (via `RuleMatchCriteria`: `filePaths`, optional `intent`)
+- Implement `matchRules(filePaths: string[]): Promise<Rule[]>` (via `RuleMatchCriteria`: `filePaths`)
 - Matching criteria:
   - File type matching (glob patterns: `*.ts`, `*.tsx`, etc.)
   - Folder matching (path prefix matching)
@@ -149,7 +147,6 @@ Users can write any markdown content below the frontmatter.
   - Description: Returns applicable rules for given file paths
   - Parameters:
     - `filePaths`: string[] (required)
-    - `intent?`: string (optional filter)
   - Returns: Array of rule objects with `id`, `content`, `metadata`
 
 ### Step 4.3: MCP Tool Implementation
@@ -241,7 +238,7 @@ Users can write any markdown content below the frontmatter.
 - Create form/editor for new rule
 - **Option A (Form-based)**: Separate fields for:
   - File path/name (for rule location)
-  - Metadata fields (fileTypes, folders, intent, priority) - generates YAML frontmatter
+  - Metadata fields (fileTypes, folders, priority) - generates YAML frontmatter
   - Markdown content (textarea for body)
   - Preview the full markdown with frontmatter before saving
 - **Option B (Raw editor)**: Single textarea showing full markdown file with frontmatter
