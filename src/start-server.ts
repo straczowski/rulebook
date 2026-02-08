@@ -1,10 +1,10 @@
 import express from "express"
-import { parseConfig } from "./config.js"
+import { parseConfig } from "./utils/parse-config.js"
 import { createMcpServerWithTransport } from "./mcp/setup-mcp.js"
 
 const startServer = async () => {
-  const config = parseConfig()
-  const mcpTransport = await createMcpServerWithTransport(config.rulesDirectory)
+  const { port, rulesDirectory } = parseConfig()
+  const mcpTransport = await createMcpServerWithTransport(rulesDirectory)
 
   const app = express()
   app.use(express.json())
@@ -17,7 +17,7 @@ const startServer = async () => {
     await mcpTransport.handleRequest(req, res, req.body)
   })
 
-  app.listen(config.port)
+  app.listen(port)
 }
 
 startServer().catch((error) => {
