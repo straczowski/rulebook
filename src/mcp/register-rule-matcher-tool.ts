@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { listAllRules } from "../core/list-all-rules.js"
 import { matchRules } from "../core/match-rules.js"
 
-const registerRuleMatcherTool = (
+export const registerRuleMatcherTool = (
   server: McpServer,
   rulesDirectory: string
 ) => {
@@ -12,7 +12,7 @@ const registerRuleMatcherTool = (
   }
   const handler = async (args: unknown) => {
     const { filePaths } = args as { filePaths: string[] }
-    return getApplicableRulesResponse(rulesDirectory, filePaths)
+    return getRulesResponse(rulesDirectory, filePaths)
   }
   registerTool(
     server,
@@ -23,7 +23,7 @@ const registerRuleMatcherTool = (
   )
 }
 
-const getApplicableRulesResponse = async (
+const getRulesResponse = async (
   rulesDirectory: string,
   filePaths: string[]
 ) => {
@@ -35,20 +35,31 @@ const getApplicableRulesResponse = async (
       content: rule.content,
       metadata: rule.metadata,
     }))
-    const text =
-      matchingRules.length === 0
-        ? "No rules found for the given file paths."
-        : JSON.stringify(rulesPayload, null, 2)
+    if (!matchingRules.length) {
+      return respondNoRulesFound()
+    }
+    const text = JSON.stringify(rulesPayload, null, 2)
     return {
       content: [{ type: "text" as const, text }],
-      structuredContent: { rules: rulesPayload },
+      structuredContent: { rules: matchingRules },
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    return {
-      content: [{ type: "text" as const, text: `Error: ${message}` }],
-      isError: true,
-    }
+    return respondError(error)
+  }
+}
+
+const respondNoRulesFound = () => {
+  return {
+    content: [{ type: "text" as const, text: "No rules found for the given file paths." }],
+    isError: true,
+  }
+}
+
+const respondError = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error)
+  return {
+    content: [{ type: "text" as const, text: `Error: ${message}` }],
+    isError: true,
   }
 }
 
@@ -66,5 +77,3 @@ const registerTool = (
     callback
   )
 }
-
-export { registerRuleMatcherTool }
