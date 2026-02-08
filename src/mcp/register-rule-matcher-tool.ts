@@ -1,17 +1,18 @@
 import { z } from "zod"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import { createRuleMatcher } from "../services/rule-matcher.js"
+import { listAllRules } from "../core/list-all-rules.js"
+import { matchRules } from "../core/match-rules.js"
 
-export const registerRuleMatcherTool = (
+const registerRuleMatcherTool = (
   server: McpServer,
-  matcher: ReturnType<typeof createRuleMatcher>
+  rulesDirectory: string
 ) => {
   const getApplicableRulesSchema = {
     filePaths: z.array(z.string()).describe("List of file paths to match rules for"),
   }
   const handler = async (args: unknown) => {
     const { filePaths } = args as { filePaths: string[] }
-    return getApplicableRulesResponse(matcher, filePaths)
+    return getApplicableRulesResponse(rulesDirectory, filePaths)
   }
   registerTool(
     server,
@@ -23,19 +24,19 @@ export const registerRuleMatcherTool = (
 }
 
 const getApplicableRulesResponse = async (
-  matcher: ReturnType<typeof createRuleMatcher>,
+  rulesDirectory: string,
   filePaths: string[]
 ) => {
   try {
-    const criteria = { filePaths }
-    const rules = await matcher.matchRules(criteria)
-    const rulesPayload = rules.map((rule) => ({
+    const allRules = await listAllRules(rulesDirectory)
+    const matchingRules = matchRules(allRules, { filePaths })
+    const rulesPayload = matchingRules.map((rule) => ({
       id: rule.id,
       content: rule.content,
       metadata: rule.metadata,
     }))
     const text =
-      rules.length === 0
+      matchingRules.length === 0
         ? "No applicable rules found for the given file paths."
         : JSON.stringify(rulesPayload, null, 2)
     return {
@@ -65,3 +66,5 @@ const registerTool = (
     callback
   )
 }
+
+export { registerRuleMatcherTool }

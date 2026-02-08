@@ -1,14 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"
-import { createFileSystemRuleRepository } from "../services/file-system-rule-repository.js"
-import { createRuleMatcher } from "../services/rule-matcher.js"
 import { registerRuleMatcherTool } from "./register-rule-matcher-tool.js"
 
 export const createMcpTransport = async (rulesDirectory: string) => {
   const server = createServer()
-  const repository = createFileSystemRuleRepository(rulesDirectory)
-  const matcher = createRuleMatcher(repository)
-  registerRuleMatcherTool(server, matcher)
+  registerRuleMatcherTool(server, rulesDirectory)
   return connectTransport(server)
 }
 
