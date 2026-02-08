@@ -1,4 +1,4 @@
-import { RuleMetadata } from "../domain/types.js"
+import { RuleMetadata } from "../types.js"
 
 export const parseMarkdownFile = (content: string): { content: string; metadata: RuleMetadata } | null => {
   if (!hasFrontmatter(content)) {

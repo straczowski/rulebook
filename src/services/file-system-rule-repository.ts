@@ -1,9 +1,11 @@
-import { readdir, readFile, writeFile, mkdir, unlink } from "node:fs/promises"
-import { join, dirname, relative } from "node:path"
-import { Rule, RuleMetadata } from "../domain/types.js"
-import { RuleRepository } from "../domain/repository.js"
+import { readdir, readFile } from "node:fs/promises"
+import { join, relative } from "node:path"
+import { Rule, RuleMetadata } from "../types.js"
 import { parseMarkdownFile } from "./markdown-rule-parser.js"
-import { formatMarkdownFile } from "./format-mardkown-file.js"
+
+export interface RuleRepository {
+  listAllRules(): Promise<Rule[]>
+}
 
 const createFileSystemRuleRepository = (rulesDirectory: string): RuleRepository => {
   const listAllRules = async (): Promise<Rule[]> => {
@@ -35,30 +37,6 @@ const createFileSystemRuleRepository = (rulesDirectory: string): RuleRepository 
       }
       throw error
     }
-  }
-
-  const createRule = async (id: string, content: string, metadata: RuleMetadata): Promise<Rule> => {
-    const filePath = getRulePath(id)
-    await ensureDirectoryExists(filePath)
-    await writeRuleToFile(filePath, content, metadata)
-    return buildRule(id, content, metadata)
-  }
-
-  const deleteRule = async (id: string): Promise<void> => {
-    const filePath = getRulePath(id)
-
-    try {
-      await unlink(filePath)
-    } catch (error) {
-      handleFileNotFound(error)
-    }
-  }
-
-  const updateRule = async (id: string, content: string, metadata: RuleMetadata): Promise<Rule> => {
-    const filePath = getRulePath(id)
-    await ensureDirectoryExists(filePath)
-    await writeRuleToFile(filePath, content, metadata)
-    return buildRule(id, content, metadata)
   }
 
   const collectMarkdownFiles = async (dir: string, basePath: string): Promise<string[]> => {
@@ -112,34 +90,6 @@ const createFileSystemRuleRepository = (rulesDirectory: string): RuleRepository 
     }
   }
 
-  const writeRuleToFile = async (
-    filePath: string,
-    content: string,
-    metadata: RuleMetadata
-  ): Promise<void> => {
-    const markdownContent = formatMarkdownFile(content, metadata)
-    await writeFile(filePath, markdownContent, "utf-8")
-  }
-
-  const ensureDirectoryExists = async (filePath: string): Promise<void> => {
-    const directory = dirname(filePath)
-    await mkdir(directory, { recursive: true })
-  }
-
-  const buildRule = (id: string, content: string, metadata: RuleMetadata): Rule => {
-    return {
-      id,
-      content,
-      metadata,
-    }
-  }
-
-  const handleFileNotFound = (error: unknown): void => {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      throw error
-    }
-  }
-
   const isMarkdownFile = (fileName: string): boolean => {
     return fileName.endsWith(".md")
   }
@@ -150,10 +100,6 @@ const createFileSystemRuleRepository = (rulesDirectory: string): RuleRepository 
 
   return {
     listAllRules,
-    getRuleById,
-    createRule,
-    deleteRule,
-    updateRule,
   }
 }
 

@@ -15,7 +15,6 @@ An MCP server for managing and serving Markdown coding rules to AI agents during
 ```
 rulebook/
 ├── src/
-│   ├── domain/          # Core domain models and types
 │   ├── services/        # Business logic services
 │   ├── api/             # HTTP API routes
 │   ├── mcp/             # MCP server implementation

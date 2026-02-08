@@ -36,7 +36,7 @@ NestJS would add unnecessary complexity (dependency injection, decorators, modul
 
 ### Step 1.3: Core Domain Model
 
-- Create TypeScript interfaces/types in code (e.g., `src/domain/types.ts` or `src/domain/Rule.ts`)
+- Create TypeScript interfaces/types in code (e.g., `src/types.ts`)
 - Define `Rule` interface/class with:
   - `id`: unique identifier (file path relative to rules directory)
   - `content`: markdown content (body, after frontmatter)

@@ -1,5 +1,5 @@
-import { Rule, RuleMatchCriteria } from "../domain/types.js"
-import { RuleRepository } from "../domain/repository.js"
+import { Rule, RuleMatchCriteria } from "../types.js"
+import { RuleRepository } from "./file-system-rule-repository.js"
 import {
   matchesFileTypePattern,
   pathStartsWithFolder,
